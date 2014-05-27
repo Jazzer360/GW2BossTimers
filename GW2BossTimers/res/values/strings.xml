@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<string name="app_name">GW2 Boss Timers</string>
+	<string name="title_activity_boss_timer">Boss Timers</string>
+
+</resources>
