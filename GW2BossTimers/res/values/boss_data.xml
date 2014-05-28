@@ -4,15 +4,15 @@
 	<string-array name="boss_data">
 		<item>80,Claw of Jormag,Shiverpeak Mountains,Frostgorge Sound,Frostwalk Tundra,150,270,570,870,1080,1350</item>
 		<item>15,Fire Elemental,Maguuma Jungle,Metrica Province,Thaumanova Reactor,45,165,285,405,525,645,765,885,1005,1125,1245,1365</item>
-		<item>68,Inquest Golem Mark II,Maguuma Jungle,Mount Maelstrom,Whitland Flats,120,240,540,810,1050,1290</item>
+		<item>68,Golem Mark II,Maguuma Jungle,Mount Maelstrom,Whitland Flats,120,240,540,810,1050,1290</item>
 		<item>55,Great Jungle Wurm,Kryta,Bloodtide Coast,Multiple,510,840,1380</item>
 		<item>15,Jungle Wurm,Maguuma Jungle,Caledon Forest,Wychmire Swamp,75,195,315,435,555,615,675,795,915,1035,1155,1275,1395</item>
-		<item>80,Legendary Karka Queen,Kryta,Southsun Cove,Driftglass Springs,390,720,1260</item>
+		<item>80,Karka Queen,Kryta,Southsun Cove,Driftglass Springs,390,720,1260</item>
 		<item>66,Megadestroyer,Maguuma Jungle,Mount Maelstrom,Malestrom\'s Bile,0,330,630,930,1140</item>
 		<item>43,Modniir Ulgoth,Kryta,Harathi Hinterlands,Modniir Gorge,90,210,480,750,1020,1230</item>
 		<item>15,Shadow Behemoth,Kryta,Queensdale,Godslost Swamp,105,225,345,465,585,705,825,945,1065,1185,1305,1425</item>
 		<item>10,Svanir Shaman,Shiverpeak Mountains,Wayfarer Foothills,Hunter\'s Lake,15,135,255,375,495,735,855,975,1095,1215,1335</item>
-		<item>50,Admiral Taidha Covington,Kryta,Bloodtide Coast,Laughing Gull Island,300,600,900,1110,1410</item>
+		<item>50,Taidha Covington,Kryta,Bloodtide Coast,Laughing Gull Island,300,600,900,1110,1410</item>
 		<item>65,Tequatl the Sunless,Maguuma Jungle,Sparkfly Fen,Splintered Coast,450,780,1320</item>
 		<item>50,The Shatterer,Ascalon,Blazeridge Steppes,Lowland Burns,60,180,420,690,990,1200</item>
 	</string-array>
