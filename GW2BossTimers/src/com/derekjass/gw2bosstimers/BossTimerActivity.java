@@ -20,6 +20,16 @@ import android.widget.TextView;
 
 public class BossTimerActivity extends ActionBarActivity {
 
+	private static final Comparator<WorldBoss> COMPARATOR = new Comparator<WorldBoss>() {
+		@Override
+		public int compare(WorldBoss lhs, WorldBoss rhs) {
+			long time = System.currentTimeMillis();
+			long lhTime = lhs.getNextSpawnTime(time);
+			long rhTime = rhs.getNextSpawnTime(time);
+			return (int) (lhTime - rhTime);
+		}
+	};
+
 	private ListView listView;
 
 	private List<WorldBoss> bosses = new ArrayList<>();
@@ -38,8 +48,8 @@ public class BossTimerActivity extends ActionBarActivity {
 		}
 
 		BossListAdapter adapter = new BossListAdapter(this, bosses);
-		adapter.sort();
 		listView.setAdapter(adapter);
+		adapter.sort(COMPARATOR);
 	}
 
 	@Override
@@ -99,7 +109,7 @@ public class BossTimerActivity extends ActionBarActivity {
 
 			@Override
 			public void onFinish() {
-				adapter.sort();
+				adapter.sort(COMPARATOR);
 			}
 
 			private static long getTimerDuration(WorldBoss boss) {
@@ -149,18 +159,6 @@ public class BossTimerActivity extends ActionBarActivity {
 					this));
 
 			return view;
-		}
-
-		public void sort() {
-			sort(new Comparator<WorldBoss>() {
-				@Override
-				public int compare(WorldBoss lhs, WorldBoss rhs) {
-					long time = System.currentTimeMillis();
-					long lhTime = lhs.getNextSpawnTime(time);
-					long rhTime = rhs.getNextSpawnTime(time);
-					return (int) (lhTime - rhTime);
-				}
-			});
 		}
 	}
 }
