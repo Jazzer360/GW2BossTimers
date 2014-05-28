@@ -6,8 +6,10 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +40,25 @@ public class BossTimerActivity extends ActionBarActivity {
 		BossListAdapter adapter = new BossListAdapter(this, bosses);
 		adapter.sort();
 		listView.setAdapter(adapter);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		maybeShowDonateDialog();
+	}
+
+	private void maybeShowDonateDialog() {
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		long lastDisplay = prefs.getLong("pref_last_display", 0);
+		long threeDays = 1000 * 60 * 60 * 24 * 3;
+		if (System.currentTimeMillis() - threeDays > lastDisplay) {
+
+			prefs.edit().putLong("pref_last_display",
+					System.currentTimeMillis());
+		}
 	}
 
 	private static class BossListAdapter extends ArrayAdapter<WorldBoss> {
