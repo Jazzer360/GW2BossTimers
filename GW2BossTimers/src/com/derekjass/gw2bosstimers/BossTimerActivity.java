@@ -32,7 +32,7 @@ public class BossTimerActivity extends ActionBarActivity {
 
 	private ListView listView;
 
-	private List<WorldBoss> bosses = new ArrayList<>();
+	private List<WorldBoss> bosses = new ArrayList<WorldBoss>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
