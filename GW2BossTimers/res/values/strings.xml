@@ -4,5 +4,6 @@
 	<string name="app_name">GW2 Boss Timers</string>
 	<string name="title_activity_boss_timer">Boss Timers</string>
 	<string name="level">"Level "</string>
+	<string name="active">Active</string>
 
 </resources>

@@ -1,5 +1,6 @@
 package com.derekjass.gw2bosstimers;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.TimeZone;
@@ -34,6 +35,7 @@ public class WorldBoss {
 		for (int i = 5; i < bossInfo.length; i++) {
 			spawnTimes[i - 5] = Integer.parseInt(bossInfo[i]);
 		}
+		Arrays.sort(spawnTimes);
 	}
 
 	public String getLevel() {
@@ -54,6 +56,23 @@ public class WorldBoss {
 
 	public String getArea() {
 		return area;
+	}
+
+	public long getPreviousSpawnTime(long time) {
+		initCalendar();
+		setCalendarToMidnight(time);
+		long midnight = cal.getTimeInMillis();
+
+		for (int i = spawnTimes.length - 1; i >= 0; i--) {
+			long spawn = midnight + spawnTimes[i] * 60 * 1000;
+			if (spawn < time) {
+				return spawn;
+			}
+		}
+
+		long ms = (1440 - spawnTimes[spawnTimes.length - 1]) * 60 * 1000;
+
+		return midnight - ms;
 	}
 
 	public long getNextSpawnTime(long time) {

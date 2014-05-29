@@ -7,6 +7,7 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -20,10 +21,17 @@ import android.widget.TextView;
 
 public class BossTimerActivity extends ActionBarActivity {
 
+	private static final long FIFTEEN_MINS = 15 * 60 * 1000;
 	private static final Comparator<WorldBoss> COMPARATOR = new Comparator<WorldBoss>() {
 		@Override
 		public int compare(WorldBoss lhs, WorldBoss rhs) {
 			long time = System.currentTimeMillis();
+			if (time - lhs.getPreviousSpawnTime(time) < FIFTEEN_MINS) {
+				return -1;
+			}
+			if (time - rhs.getPreviousSpawnTime(time) < FIFTEEN_MINS) {
+				return 1;
+			}
 			long lhTime = lhs.getNextSpawnTime(time);
 			long rhTime = rhs.getNextSpawnTime(time);
 			return (int) (lhTime - rhTime);
@@ -31,7 +39,7 @@ public class BossTimerActivity extends ActionBarActivity {
 	};
 
 	private ListView listView;
-
+	private BossListAdapter adapter;
 	private List<WorldBoss> bosses = new ArrayList<WorldBoss>();
 
 	@Override
@@ -47,24 +55,24 @@ public class BossTimerActivity extends ActionBarActivity {
 			bosses.add(new WorldBoss(boss.split(",")));
 		}
 
-		BossListAdapter adapter = new BossListAdapter(this, bosses);
+		adapter = new BossListAdapter(this, bosses);
 		listView.setAdapter(adapter);
-		adapter.sort(COMPARATOR);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+		adapter.sort(COMPARATOR);
 		maybeShowDonateDialog();
 	}
 
 	private void maybeShowDonateDialog() {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		long lastDisplay = prefs.getLong("pref_last_display", 0);
+		long lastDisplay = prefs.getLong("pref_last_display",
+				System.currentTimeMillis());
 		long threeDays = 1000 * 60 * 60 * 24 * 3;
-		if (System.currentTimeMillis() - threeDays > lastDisplay) {
+		if (System.currentTimeMillis() - lastDisplay > threeDays) {
 
 			prefs.edit().putLong("pref_last_display",
 					System.currentTimeMillis());
@@ -92,7 +100,14 @@ public class BossTimerActivity extends ActionBarActivity {
 
 			@Override
 			public void onTick(long millisUntilFinished) {
-				time.setText(getTimeString(millisUntilFinished));
+				long timeToSpawn = millisUntilFinished - FIFTEEN_MINS;
+				if (timeToSpawn > 0) {
+					time.setText(getTimeString(timeToSpawn));
+					time.setBackgroundColor(Color.TRANSPARENT);
+				} else {
+					time.setText(R.string.active);
+					time.setBackgroundColor(Color.YELLOW);
+				}
 			}
 
 			@SuppressLint("DefaultLocale")
@@ -114,7 +129,12 @@ public class BossTimerActivity extends ActionBarActivity {
 
 			private static long getTimerDuration(WorldBoss boss) {
 				long time = System.currentTimeMillis();
-				return boss.getNextSpawnTime(time) - time;
+				long prevSpawn = boss.getPreviousSpawnTime(time);
+				if (time - prevSpawn < FIFTEEN_MINS) {
+					return FIFTEEN_MINS - (time - prevSpawn);
+				} else {
+					return boss.getNextSpawnTime(time) - time + FIFTEEN_MINS;
+				}
 			}
 		}
 
