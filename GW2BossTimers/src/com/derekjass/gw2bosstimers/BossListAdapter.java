@@ -22,11 +22,11 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 
 	private static class BossTimer extends CountDownTimer {
 
-		private TextView time;
+		private TextView mTime;
 
 		public BossTimer(TextView timeView, WorldBoss boss) {
 			super(getTimerDuration(boss), 1000);
-			this.time = timeView;
+			this.mTime = timeView;
 			start();
 		}
 
@@ -34,11 +34,11 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 		public void onTick(long millisUntilFinished) {
 			long timeToSpawn = millisUntilFinished - FIFTEEN_MINS;
 			if (timeToSpawn > 0) {
-				time.setText(getTimeString(timeToSpawn));
-				time.setBackgroundColor(Color.TRANSPARENT);
+				mTime.setText(getTimeString(timeToSpawn));
+				mTime.setBackgroundColor(Color.TRANSPARENT);
 			} else {
-				time.setText(R.string.active);
-				time.setBackgroundColor(Color.YELLOW);
+				mTime.setText(R.string.active);
+				mTime.setBackgroundColor(Color.YELLOW);
 			}
 		}
 
@@ -69,18 +69,18 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 		}
 	}
 
-	private Context context;
+	private Context mContext;
 
 	public BossListAdapter(Context context, List<WorldBoss> objects) {
 		super(context, R.layout.boss_list_item, objects);
-		this.context = context;
+		this.mContext = context;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = convertView;
 		if (view == null) {
-			LayoutInflater inflater = (LayoutInflater) context
+			LayoutInflater inflater = (LayoutInflater) mContext
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.boss_list_item, null);
 			BossListAdapter.ViewHolder views = new ViewHolder();
