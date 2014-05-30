@@ -2,19 +2,9 @@ package com.derekjass.gw2bosstimers;
 
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Comparator;
 import java.util.TimeZone;
 
 public class WorldBoss {
-
-	public static final Comparator<WorldBoss> COMPARATOR = new Comparator<WorldBoss>() {
-		@Override
-		public int compare(WorldBoss lhs, WorldBoss rhs) {
-			long time = System.currentTimeMillis();
-			return (int) (lhs.getNextSpawnTime(time) - rhs
-					.getNextSpawnTime(time));
-		}
-	};
 
 	private Calendar cal;
 

@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
@@ -38,32 +39,33 @@ public class BossTimerActivity extends ActionBarActivity {
 		}
 	};
 
-	private ListView listView;
-	private BossListAdapter adapter;
-	private List<WorldBoss> bosses = new ArrayList<WorldBoss>();
+	private Handler mHandler = new Handler();
+	private ListView mListView;
+	private BossListAdapter mAdapter;
+	private List<WorldBoss> mBosses = new ArrayList<WorldBoss>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_boss_timer);
 		setTitle(R.string.title_activity_boss_timer);
-		listView = (ListView) findViewById(R.id.listView);
+		mListView = (ListView) findViewById(R.id.listView);
 
 		String[] bossData = getResources().getStringArray(R.array.boss_data);
 
 		for (String boss : bossData) {
-			bosses.add(new WorldBoss(boss.split(",")));
+			mBosses.add(new WorldBoss(boss.split(",")));
 		}
 
-		adapter = new BossListAdapter(this, bosses);
-		listView.setAdapter(adapter);
+		mAdapter = new BossListAdapter(this, mBosses);
+		mListView.setAdapter(mAdapter);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		adapter.sort(COMPARATOR);
 		maybeShowDonateDialog();
+		mAdapter.sort(COMPARATOR);
 	}
 
 	private void maybeShowDonateDialog() {
@@ -88,13 +90,11 @@ public class BossTimerActivity extends ActionBarActivity {
 		private static class BossTimer extends CountDownTimer {
 
 			private TextView time;
-			private BossListAdapter adapter;
 
 			public BossTimer(TextView timeView, WorldBoss boss,
 					BossListAdapter adapter) {
 				super(getTimerDuration(boss), 1000);
 				this.time = timeView;
-				this.adapter = adapter;
 				start();
 			}
 
@@ -110,6 +110,10 @@ public class BossTimerActivity extends ActionBarActivity {
 				}
 			}
 
+			@Override
+			public void onFinish() {
+			}
+
 			@SuppressLint("DefaultLocale")
 			private static String getTimeString(long ms) {
 				long hrs = ms / 1000 / 60 / 60;
@@ -120,11 +124,6 @@ public class BossTimerActivity extends ActionBarActivity {
 				} else {
 					return String.format("%d:%02d", mins, secs);
 				}
-			}
-
-			@Override
-			public void onFinish() {
-				adapter.sort(COMPARATOR);
 			}
 
 			private static long getTimerDuration(WorldBoss boss) {
@@ -143,7 +142,6 @@ public class BossTimerActivity extends ActionBarActivity {
 		public BossListAdapter(Context context, List<WorldBoss> objects) {
 			super(context, R.layout.boss_list_item, objects);
 			this.context = context;
-
 		}
 
 		@Override
