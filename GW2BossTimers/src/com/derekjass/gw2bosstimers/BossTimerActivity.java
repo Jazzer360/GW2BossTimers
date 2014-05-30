@@ -13,6 +13,7 @@ import android.widget.ListView;
 
 public class BossTimerActivity extends ActionBarActivity {
 
+	private static final String PREF_LAST_DISPLAY = "pref_last_display";
 	static final long FIFTEEN_MINS = 15 * 60 * 1000;
 	private static final Comparator<WorldBoss> COMPARATOR = new Comparator<WorldBoss>() {
 		@Override
@@ -85,12 +86,12 @@ public class BossTimerActivity extends ActionBarActivity {
 	private void maybeShowDonateDialog() {
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		long lastDisplay = prefs.getLong("pref_last_display",
+		long lastDisplay = prefs.getLong(PREF_LAST_DISPLAY,
 				System.currentTimeMillis());
 		long threeDays = 1000 * 60 * 60 * 24 * 3;
 		if (System.currentTimeMillis() - lastDisplay > threeDays) {
 
-			prefs.edit().putLong("pref_last_display",
+			prefs.edit().putLong(PREF_LAST_DISPLAY,
 					System.currentTimeMillis());
 		}
 	}
