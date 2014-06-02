@@ -84,8 +84,8 @@ public class WorldBoss {
 
 	private void initCalendar() {
 		if (mCalendar == null) {
-			TimeZone est = TimeZone.getTimeZone("America/New_York");
-			mCalendar = Calendar.getInstance(est);
+			TimeZone gmt = TimeZone.getTimeZone("GMT");
+			mCalendar = Calendar.getInstance(gmt);
 		}
 	}
 

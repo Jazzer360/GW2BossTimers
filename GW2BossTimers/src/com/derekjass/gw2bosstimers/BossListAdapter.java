@@ -44,6 +44,8 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 
 		@Override
 		public void onFinish() {
+			mTime.setText("0:00");
+			mTime.setBackgroundColor(Color.TRANSPARENT);
 		}
 
 		@SuppressLint("DefaultLocale")
