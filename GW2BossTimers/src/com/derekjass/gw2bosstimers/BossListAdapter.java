@@ -2,12 +2,16 @@ package com.derekjass.gw2bosstimers;
 
 import static com.derekjass.gw2bosstimers.BossTimerActivity.FIFTEEN_MINS;
 
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,10 +76,14 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 	}
 
 	private Context mContext;
+	private Calendar mCalendar;
+	private SharedPreferences mPrefs;
 
 	public BossListAdapter(Context context, List<WorldBoss> objects) {
 		super(context, R.layout.boss_list_item, objects);
-		this.mContext = context;
+		mContext = context;
+		mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+		mCalendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 	}
 
 	@Override
