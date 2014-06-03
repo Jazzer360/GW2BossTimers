@@ -21,13 +21,6 @@ import android.widget.TextView;
 
 public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 
-	private static class ViewHolder {
-		private TextView bossName, level, region, zone, area, timeToSpawn,
-				killedText;
-		private BossTimer bossTimer;
-		private PrefKeyListener listener;
-	}
-
 	private static class BossTimer extends CountDownTimer {
 
 		private TextView mTime;
@@ -77,6 +70,13 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 				return boss.getNextSpawnTime(time) - time + FIFTEEN_MINS;
 			}
 		}
+	}
+
+	private static class ViewHolder {
+		private TextView bossName, level, region, zone, area, timeToSpawn,
+				killedText;
+		private BossTimer bossTimer;
+		private PrefKeyListener listener;
 	}
 
 	private Context mContext;
