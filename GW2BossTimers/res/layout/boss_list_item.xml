@@ -27,20 +27,30 @@
 		android:layout_alignParentLeft="true"
 		android:layout_below="@+id/level" />
 
-	<TextView 
+	<TextView
 		android:id="@+id/levelLabel"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentLeft="true"
 		android:layout_below="@+id/bossName"
 		android:text="@string/level" />
-	
+
 	<TextView
 		android:id="@+id/level"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_toRightOf="@+id/levelLabel"
-		android:layout_below="@+id/bossName" />
+		android:layout_below="@+id/bossName"
+		android:layout_toRightOf="@+id/levelLabel" />
+
+	<TextView
+		android:id="@+id/killedToday"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignBaseline="@+id/level"
+		android:layout_toRightOf="@+id/level"
+		android:text="@string/killed_today_label"
+		android:textColor="@color/red"
+		android:visibility="gone" />
 
 	<TextView
 		android:id="@+id/zone"

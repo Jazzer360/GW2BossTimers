@@ -1,6 +1,7 @@
 package com.derekjass.gw2bosstimers;
 
 import static com.derekjass.gw2bosstimers.BossTimerApplication.FIFTEEN_MINS;
+import static com.derekjass.gw2bosstimers.BossTimerApplication.PREF_LAST_KILL_PREFIX;
 
 import java.util.Calendar;
 import java.util.List;
@@ -21,7 +22,10 @@ import android.widget.TextView;
 public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 
 	private static class ViewHolder {
-		private TextView bossName, level, region, zone, area, timeToSpawn;
+		private TextView bossName, level, region, zone, area, timeToSpawn,
+				killedText;
+		private BossTimer bossTimer;
+		private PrefKeyListener listener;
 	}
 
 	private static class BossTimer extends CountDownTimer {
@@ -89,34 +93,79 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View view = convertView;
+		final ViewHolder views;
+
 		if (view == null) {
 			LayoutInflater inflater = (LayoutInflater) mContext
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			view = inflater.inflate(R.layout.boss_list_item, null);
-			BossListAdapter.ViewHolder views = new ViewHolder();
+			views = new ViewHolder();
 			views.bossName = (TextView) view.findViewById(R.id.bossName);
 			views.level = (TextView) view.findViewById(R.id.level);
 			views.region = (TextView) view.findViewById(R.id.region);
 			views.zone = (TextView) view.findViewById(R.id.zone);
 			views.area = (TextView) view.findViewById(R.id.area);
 			views.timeToSpawn = (TextView) view.findViewById(R.id.timeToSpawn);
+			views.killedText = (TextView) view.findViewById(R.id.killedToday);
 			view.setTag(views);
 		} else {
-			((CountDownTimer) view.getTag(R.id.boss_timer)).cancel();
-			view.setTag(R.id.boss_timer, null);
+			views = (ViewHolder) view.getTag();
+			views.bossTimer.cancel();
+			views.bossTimer = null;
+			mPrefs.unregisterOnSharedPreferenceChangeListener(views.listener);
+			views.listener = null;
 		}
 
 		WorldBoss boss = getItem(position);
-		BossListAdapter.ViewHolder views = (BossListAdapter.ViewHolder) view
-				.getTag();
 
 		views.bossName.setText(boss.getName());
 		views.level.setText(boss.getLevel());
 		views.region.setText(boss.getRegion());
 		views.zone.setText(boss.getZone());
 		views.area.setText(boss.getArea());
-		view.setTag(R.id.boss_timer, new BossTimer(views.timeToSpawn, boss));
+		views.killedText.setVisibility(isKilled(boss) ? View.VISIBLE
+				: View.GONE);
+		views.bossTimer = new BossTimer(views.timeToSpawn, boss);
+		views.listener = new PrefKeyListener(getPrefKey(boss)) {
+			@Override
+			public void onPreferenceKeyChange(SharedPreferences prefs,
+					String key) {
+				long lastKilled = prefs.getLong(key, 0);
+				boolean killed = lastKilled > getPreviousReset();
+				views.killedText.setVisibility(killed ? View.VISIBLE
+						: View.GONE);
+			}
+		};
+		mPrefs.registerOnSharedPreferenceChangeListener(views.listener);
 
 		return view;
+	}
+
+	public void setKilled(int position) {
+		WorldBoss boss = getItem(position);
+		if (isKilled(boss)) {
+			mPrefs.edit().putLong(getPrefKey(boss), 0).commit();
+		} else {
+			mPrefs.edit().putLong(getPrefKey(boss), System.currentTimeMillis())
+					.commit();
+		}
+	}
+
+	private long getPreviousReset() {
+		mCalendar.setTimeInMillis(System.currentTimeMillis());
+		mCalendar.set(Calendar.HOUR_OF_DAY, 0);
+		mCalendar.set(Calendar.MINUTE, 0);
+		mCalendar.set(Calendar.SECOND, 0);
+		mCalendar.set(Calendar.MILLISECOND, 0);
+		return mCalendar.getTimeInMillis();
+	}
+
+	private boolean isKilled(WorldBoss boss) {
+		long lastKill = mPrefs.getLong(getPrefKey(boss), 0);
+		return lastKill > getPreviousReset() ? true : false;
+	}
+
+	private static String getPrefKey(WorldBoss boss) {
+		return PREF_LAST_KILL_PREFIX + boss.getName();
 	}
 }

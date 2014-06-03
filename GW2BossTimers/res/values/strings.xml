@@ -5,5 +5,6 @@
 	<string name="title_activity_boss_timer">Boss Timers</string>
 	<string name="level">"Level "</string>
 	<string name="active">Active</string>
+	<string name="killed_today_label">" - Killed today</string>
 
 </resources>

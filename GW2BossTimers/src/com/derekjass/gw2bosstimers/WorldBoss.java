@@ -1,10 +1,29 @@
 package com.derekjass.gw2bosstimers;
 
+import static com.derekjass.gw2bosstimers.BossTimerApplication.FIFTEEN_MINS;
+
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.TimeZone;
 
 public class WorldBoss {
+
+	public static final Comparator<WorldBoss> COMPARATOR = new Comparator<WorldBoss>() {
+		@Override
+		public int compare(WorldBoss lhs, WorldBoss rhs) {
+			long time = System.currentTimeMillis();
+			if (time - lhs.getPreviousSpawnTime(time) < FIFTEEN_MINS) {
+				return -1;
+			}
+			if (time - rhs.getPreviousSpawnTime(time) < FIFTEEN_MINS) {
+				return 1;
+			}
+			long lhTime = lhs.getNextSpawnTime(time);
+			long rhTime = rhs.getNextSpawnTime(time);
+			return (int) (lhTime - rhTime);
+		}
+	};
 
 	private Calendar mCalendar;
 

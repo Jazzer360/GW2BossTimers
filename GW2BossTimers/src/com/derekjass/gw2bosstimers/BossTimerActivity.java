@@ -2,9 +2,9 @@ package com.derekjass.gw2bosstimers;
 
 import static com.derekjass.gw2bosstimers.BossTimerApplication.FIFTEEN_MINS;
 import static com.derekjass.gw2bosstimers.BossTimerApplication.PREF_LAST_DISPLAY;
+import static com.derekjass.gw2bosstimers.BossTimerApplication.THREE_DAYS;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import android.content.SharedPreferences;
@@ -12,25 +12,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class BossTimerActivity extends ActionBarActivity {
-
-	private static final Comparator<WorldBoss> COMPARATOR = new Comparator<WorldBoss>() {
-		@Override
-		public int compare(WorldBoss lhs, WorldBoss rhs) {
-			long time = System.currentTimeMillis();
-			if (time - lhs.getPreviousSpawnTime(time) < FIFTEEN_MINS) {
-				return -1;
-			}
-			if (time - rhs.getPreviousSpawnTime(time) < FIFTEEN_MINS) {
-				return 1;
-			}
-			long lhTime = lhs.getNextSpawnTime(time);
-			long rhTime = rhs.getNextSpawnTime(time);
-			return (int) (lhTime - rhTime);
-		}
-	};
 
 	private Handler mHandler = new Handler();
 	private ListView mListView;
@@ -52,17 +39,25 @@ public class BossTimerActivity extends ActionBarActivity {
 
 		mAdapter = new BossListAdapter(this, mBosses);
 		mListView.setAdapter(mAdapter);
+
+		mListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				mAdapter.setKilled(position);
+			}
+		});
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		maybeShowDonateDialog();
-		mAdapter.sort(COMPARATOR);
+		mAdapter.sort(WorldBoss.COMPARATOR);
 		mHandler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
-				mAdapter.sort(COMPARATOR);
+				mAdapter.sort(WorldBoss.COMPARATOR);
 				mHandler.postDelayed(this, getMsToNextSort());
 			}
 		}, getMsToNextSort());
@@ -89,11 +84,10 @@ public class BossTimerActivity extends ActionBarActivity {
 				.getDefaultSharedPreferences(this);
 		long lastDisplay = prefs.getLong(PREF_LAST_DISPLAY,
 				System.currentTimeMillis());
-		long threeDays = 1000 * 60 * 60 * 24 * 3;
-		if (System.currentTimeMillis() - lastDisplay > threeDays) {
 
-			prefs.edit().putLong(PREF_LAST_DISPLAY,
-					System.currentTimeMillis());
+		if (System.currentTimeMillis() - lastDisplay > THREE_DAYS) {
+
+			prefs.edit().putLong(PREF_LAST_DISPLAY, System.currentTimeMillis());
 		}
 	}
 }
