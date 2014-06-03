@@ -117,21 +117,21 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 		}
 
 		WorldBoss boss = getItem(position);
+		boolean killed = isKilled(boss);
 
 		views.bossName.setText(boss.getName());
 		views.level.setText(boss.getLevel());
 		views.region.setText(boss.getRegion());
 		views.zone.setText(boss.getZone());
 		views.area.setText(boss.getArea());
-		views.killedText.setVisibility(isKilled(boss) ? View.VISIBLE
-				: View.GONE);
+		views.killedText.setVisibility(killed ? View.VISIBLE : View.GONE);
 		views.bossTimer = new BossTimer(views.timeToSpawn, boss);
 		views.listener = new PrefKeyListener(getPrefKey(boss)) {
 			@Override
 			public void onPreferenceKeyChange(SharedPreferences prefs,
 					String key) {
 				long lastKilled = prefs.getLong(key, 0);
-				boolean killed = lastKilled > getPreviousReset();
+				boolean killed = isKilled(lastKilled);
 				views.killedText.setVisibility(killed ? View.VISIBLE
 						: View.GONE);
 			}
@@ -160,9 +160,13 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 		return mCalendar.getTimeInMillis();
 	}
 
+	private boolean isKilled(long lastKilled) {
+		return lastKilled > getPreviousReset();
+	}
+
 	private boolean isKilled(WorldBoss boss) {
 		long lastKill = mPrefs.getLong(getPrefKey(boss), 0);
-		return lastKill > getPreviousReset() ? true : false;
+		return isKilled(lastKill);
 	}
 
 	private static String getPrefKey(WorldBoss boss) {
