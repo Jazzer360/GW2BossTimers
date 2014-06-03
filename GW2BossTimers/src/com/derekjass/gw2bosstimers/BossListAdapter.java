@@ -1,6 +1,6 @@
 package com.derekjass.gw2bosstimers;
 
-import static com.derekjass.gw2bosstimers.BossTimerActivity.FIFTEEN_MINS;
+import static com.derekjass.gw2bosstimers.BossTimerApplication.FIFTEEN_MINS;
 
 import java.util.Calendar;
 import java.util.List;

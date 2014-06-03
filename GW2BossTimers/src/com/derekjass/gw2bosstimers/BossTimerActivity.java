@@ -1,5 +1,8 @@
 package com.derekjass.gw2bosstimers;
 
+import static com.derekjass.gw2bosstimers.BossTimerApplication.FIFTEEN_MINS;
+import static com.derekjass.gw2bosstimers.BossTimerApplication.PREF_LAST_DISPLAY;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -13,8 +16,6 @@ import android.widget.ListView;
 
 public class BossTimerActivity extends ActionBarActivity {
 
-	private static final String PREF_LAST_DISPLAY = "pref_last_display";
-	static final long FIFTEEN_MINS = 15 * 60 * 1000;
 	private static final Comparator<WorldBoss> COMPARATOR = new Comparator<WorldBoss>() {
 		@Override
 		public int compare(WorldBoss lhs, WorldBoss rhs) {
@@ -62,9 +63,9 @@ public class BossTimerActivity extends ActionBarActivity {
 			@Override
 			public void run() {
 				mAdapter.sort(COMPARATOR);
-				mHandler.postDelayed(this, getMsToNextRefresh());
+				mHandler.postDelayed(this, getMsToNextSort());
 			}
-		}, getMsToNextRefresh());
+		}, getMsToNextSort());
 	}
 
 	@Override
@@ -73,7 +74,7 @@ public class BossTimerActivity extends ActionBarActivity {
 		mHandler.removeCallbacksAndMessages(null);
 	}
 
-	private long getMsToNextRefresh() {
+	private long getMsToNextSort() {
 		WorldBoss boss = mBosses.get(0);
 		long time = System.currentTimeMillis();
 		long prevSpawn = boss.getPreviousSpawnTime(time);
