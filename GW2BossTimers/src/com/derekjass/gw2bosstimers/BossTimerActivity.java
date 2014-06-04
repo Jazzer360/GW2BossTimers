@@ -1,6 +1,5 @@
 package com.derekjass.gw2bosstimers;
 
-import static com.derekjass.gw2bosstimers.BossTimerApplication.FIFTEEN_MINS;
 import static com.derekjass.gw2bosstimers.BossTimerApplication.PREF_LAST_DISPLAY;
 import static com.derekjass.gw2bosstimers.BossTimerApplication.THREE_DAYS;
 
@@ -9,7 +8,6 @@ import java.util.List;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
@@ -19,7 +17,6 @@ import android.widget.ListView;
 
 public class BossTimerActivity extends ActionBarActivity {
 
-	private Handler mHandler = new Handler();
 	private ListView mListView;
 	private BossListAdapter mAdapter;
 	private List<WorldBoss> mBosses = new ArrayList<WorldBoss>();
@@ -39,12 +36,11 @@ public class BossTimerActivity extends ActionBarActivity {
 
 		mAdapter = new BossListAdapter(this, mBosses);
 		mListView.setAdapter(mAdapter);
-
 		mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				mAdapter.setKilled(position);
+				mAdapter.toggleKilled(position);
 			}
 		});
 	}
@@ -53,30 +49,13 @@ public class BossTimerActivity extends ActionBarActivity {
 	protected void onResume() {
 		super.onResume();
 		maybeShowDonateDialog();
-		mAdapter.sort(WorldBoss.COMPARATOR);
-		mHandler.postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				mAdapter.sort(WorldBoss.COMPARATOR);
-				mHandler.postDelayed(this, getMsToNextSort());
-			}
-		}, getMsToNextSort());
+		mAdapter.startSorting();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		mHandler.removeCallbacksAndMessages(null);
-	}
-
-	private long getMsToNextSort() {
-		WorldBoss boss = mBosses.get(0);
-		long time = System.currentTimeMillis();
-		long prevSpawn = boss.getPreviousSpawnTime(time);
-		if (time - prevSpawn < FIFTEEN_MINS) {
-			return FIFTEEN_MINS - (time - prevSpawn);
-		}
-		return boss.getNextSpawnTime(time) - time + FIFTEEN_MINS;
+		mAdapter.stopSorting();
 	}
 
 	private void maybeShowDonateDialog() {
