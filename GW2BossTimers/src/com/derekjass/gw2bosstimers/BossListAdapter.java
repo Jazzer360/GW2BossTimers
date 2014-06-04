@@ -1,13 +1,12 @@
 package com.derekjass.gw2bosstimers;
 
 import static com.derekjass.gw2bosstimers.BossTimerApplication.FIFTEEN_MINS;
+import static com.derekjass.gw2bosstimers.BossTimerApplication.ONE_DAY;
 import static com.derekjass.gw2bosstimers.BossTimerApplication.PREF_LAST_KILL_PREFIX;
 
-import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -30,7 +29,6 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 	}
 
 	private Context mContext;
-	private Calendar mCalendar;
 	private SharedPreferences mPrefs;
 	private CountDownTimer mTimer;
 
@@ -38,7 +36,6 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 		super(context, R.layout.boss_list_item, objects);
 		mContext = context;
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-		mCalendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 	}
 
 	public void startSorting() {
@@ -94,18 +91,8 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 		final ViewHolder views;
 
 		if (view == null) {
-			LayoutInflater inflater = (LayoutInflater) mContext
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			view = inflater.inflate(R.layout.boss_list_item, null);
-			views = new ViewHolder();
-			views.bossName = (TextView) view.findViewById(R.id.bossName);
-			views.level = (TextView) view.findViewById(R.id.level);
-			views.region = (TextView) view.findViewById(R.id.region);
-			views.zone = (TextView) view.findViewById(R.id.zone);
-			views.area = (TextView) view.findViewById(R.id.area);
-			views.timeToSpawn = (TextView) view.findViewById(R.id.timeToSpawn);
-			views.killedText = (TextView) view.findViewById(R.id.killedToday);
-			view.setTag(views);
+			view = getNewView();
+			views = setupHolder(view);
 		} else {
 			views = (ViewHolder) view.getTag();
 			mPrefs.unregisterOnSharedPreferenceChangeListener(views.listener);
@@ -116,14 +103,15 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 		long time = System.currentTimeMillis();
 		long prevSpawn = boss.getPreviousSpawnTime(time);
 		long nextSpawn = boss.getNextSpawnTime(time);
-		boolean killed = isKilled(boss);
+		boolean active = time - prevSpawn < FIFTEEN_MINS;
+		boolean killed = isKilled(boss, active ? time : nextSpawn);
 
 		views.bossName.setText(boss.getName());
 		views.level.setText(boss.getLevel());
 		views.region.setText(boss.getRegion());
 		views.zone.setText(boss.getZone());
 		views.area.setText(boss.getArea());
-		if (time - prevSpawn < FIFTEEN_MINS) {
+		if (active) {
 			views.timeToSpawn.setText(R.string.active);
 			views.timeToSpawn.setBackgroundColor(Color.YELLOW);
 		} else {
@@ -134,7 +122,7 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 		views.listener = new LongPreferenceChangeListener(getPrefKey(boss)) {
 			@Override
 			public void onSharedPreferenceChanged(long newValue) {
-				boolean killed = isKilled(newValue);
+				boolean killed = isKilled(newValue, System.currentTimeMillis());
 				views.killedText.setVisibility(killed ? View.VISIBLE
 						: View.GONE);
 			}
@@ -145,32 +133,46 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 		return view;
 	}
 
+	private View getNewView() {
+		LayoutInflater inflater = (LayoutInflater) mContext
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		return inflater.inflate(R.layout.boss_list_item, null);
+	}
+
+	private ViewHolder setupHolder(View view) {
+		ViewHolder views = new ViewHolder();
+		views.bossName = (TextView) view.findViewById(R.id.bossName);
+		views.level = (TextView) view.findViewById(R.id.level);
+		views.region = (TextView) view.findViewById(R.id.region);
+		views.zone = (TextView) view.findViewById(R.id.zone);
+		views.area = (TextView) view.findViewById(R.id.area);
+		views.timeToSpawn = (TextView) view.findViewById(R.id.timeToSpawn);
+		views.killedText = (TextView) view.findViewById(R.id.killedToday);
+		view.setTag(views);
+		return views;
+	}
+
 	public void toggleKilled(int position) {
+		long time = System.currentTimeMillis();
 		WorldBoss boss = getItem(position);
-		if (isKilled(boss)) {
+		if (isKilled(boss, time)) {
 			mPrefs.edit().putLong(getPrefKey(boss), 0).commit();
 		} else {
-			mPrefs.edit().putLong(getPrefKey(boss), System.currentTimeMillis())
-					.commit();
+			mPrefs.edit().putLong(getPrefKey(boss), time).commit();
 		}
 	}
 
-	private long getPreviousReset() {
-		mCalendar.setTimeInMillis(System.currentTimeMillis());
-		mCalendar.set(Calendar.HOUR_OF_DAY, 0);
-		mCalendar.set(Calendar.MINUTE, 0);
-		mCalendar.set(Calendar.SECOND, 0);
-		mCalendar.set(Calendar.MILLISECOND, 0);
-		return mCalendar.getTimeInMillis();
+	private long getPreviousReset(long time) {
+		return time / ONE_DAY * ONE_DAY;
 	}
 
-	private boolean isKilled(long lastKilled) {
-		return lastKilled > getPreviousReset();
+	private boolean isKilled(long lastKilled, long time) {
+		return lastKilled > getPreviousReset(time);
 	}
 
-	private boolean isKilled(WorldBoss boss) {
+	private boolean isKilled(WorldBoss boss, long time) {
 		long lastKill = mPrefs.getLong(getPrefKey(boss), 0);
-		return isKilled(lastKill);
+		return isKilled(lastKill, time);
 	}
 
 	private static String getTimeString(long ms) {
