@@ -6,5 +6,7 @@
 	<string name="level">"Level "</string>
 	<string name="active">Active</string>
 	<string name="killed_today_label">" - Killed today</string>
+	<string name="donations">Donations are appreciated and may be sent to:</string>
+	<string name="account">Jess.4761</string>
 
 </resources>

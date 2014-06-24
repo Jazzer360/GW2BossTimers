@@ -10,8 +10,7 @@ public class BossTimerApplication extends Application {
 
 	public static final long ONE_MINUTE = 60 * 1000;
 	public static final long FIFTEEN_MINS = 15 * ONE_MINUTE;
-	public static final long ONE_DAY = 24 * 60 * 60 * 1000;
-	public static final long THREE_DAYS = 3 * ONE_DAY;
+	public static final long ONE_DAY = 24 * 60 * ONE_MINUTE;
 
 	public static long minutes(long mins) {
 		return mins * ONE_MINUTE;

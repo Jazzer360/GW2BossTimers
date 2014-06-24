@@ -49,7 +49,7 @@
 		android:layout_alignBaseline="@+id/level"
 		android:layout_toRightOf="@+id/level"
 		android:text="@string/killed_today_label"
-		android:textColor="@color/red"
+		android:textColor="#ED3126"
 		android:visibility="gone" />
 
 	<TextView

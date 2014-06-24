@@ -1,14 +1,9 @@
 package com.derekjass.gw2bosstimers;
 
-import static com.derekjass.gw2bosstimers.BossTimerApplication.PREF_LAST_DISPLAY;
-import static com.derekjass.gw2bosstimers.BossTimerApplication.THREE_DAYS;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -48,7 +43,6 @@ public class BossTimerActivity extends ActionBarActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		maybeShowDonateDialog();
 		mAdapter.startSorting();
 	}
 
@@ -56,17 +50,5 @@ public class BossTimerActivity extends ActionBarActivity {
 	protected void onPause() {
 		super.onPause();
 		mAdapter.stopSorting();
-	}
-
-	private void maybeShowDonateDialog() {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
-		long lastDisplay = prefs.getLong(PREF_LAST_DISPLAY,
-				System.currentTimeMillis());
-
-		if (System.currentTimeMillis() - lastDisplay > THREE_DAYS) {
-
-			prefs.edit().putLong(PREF_LAST_DISPLAY, System.currentTimeMillis());
-		}
 	}
 }

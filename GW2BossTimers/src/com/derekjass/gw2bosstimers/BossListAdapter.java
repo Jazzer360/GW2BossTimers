@@ -77,9 +77,10 @@ public class BossListAdapter extends ArrayAdapter<WorldBoss> {
 	private long getMsUntilSort(long time) {
 		WorldBoss boss = getItem(0);
 		long lastSpawn = boss.getPreviousSpawnTime(time);
+		long timeSinceLastSpawn = time - lastSpawn;
 
-		if (time - lastSpawn < FIFTEEN_MINS) {
-			return FIFTEEN_MINS - (time - lastSpawn);
+		if (timeSinceLastSpawn < FIFTEEN_MINS) {
+			return FIFTEEN_MINS - timeSinceLastSpawn;
 		} else {
 			return boss.getNextSpawnTime(time) - time + FIFTEEN_MINS;
 		}
