@@ -1,54 +1,66 @@
 package com.derekjass.gw2bosstimers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBar.TabListener;
 import android.support.v7.app.ActionBarActivity;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 
-public class BossTimerActivity extends ActionBarActivity {
+public class BossTimerActivity extends ActionBarActivity implements TabListener {
 
-	private ListView mListView;
-	private BossListAdapter mAdapter;
-	private List<WorldBoss> mBosses = new ArrayList<WorldBoss>();
+	private ViewPager mViewPager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_boss_timer);
-		setTitle(R.string.title_activity_boss_timer);
-		mListView = (ListView) findViewById(R.id.listView);
+		mViewPager = (ViewPager) findViewById(R.id.viewPager);
 
-		String[] bossData = getResources().getStringArray(R.array.boss_data);
-
-		for (String boss : bossData) {
-			mBosses.add(new WorldBoss(boss.split(",")));
-		}
-
-		mAdapter = new BossListAdapter(this, mBosses);
-		mListView.setAdapter(mAdapter);
-		mListView.setOnItemClickListener(new OnItemClickListener() {
+		mViewPager.setAdapter(new FragmentPagerAdapter(
+				getSupportFragmentManager()) {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				mAdapter.toggleKilled(position);
+			public Fragment getItem(int index) {
+				switch (index) {
+				case 0:
+					return new BossTimerFragment();
+				case 1:
+					return new Fragment();
+				default:
+					return null;
+				}
+			}
+
+			@Override
+			public int getCount() {
+				return 2;
 			}
 		});
+
+		ActionBar actionBar = getSupportActionBar();
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		actionBar.addTab(actionBar.newTab()
+				.setText(getString(R.string.boss_timers)).setTabListener(this));
+		actionBar.addTab(actionBar.newTab()
+				.setText(getString(R.string.dungeon_paths))
+				.setTabListener(this));
+		actionBar.setDisplayShowHomeEnabled(false);
+		actionBar.setDisplayShowTitleEnabled(false);
 	}
 
 	@Override
-	protected void onResume() {
-		super.onResume();
-		mAdapter.startSorting();
+	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
 	}
 
 	@Override
-	protected void onPause() {
-		super.onPause();
-		mAdapter.stopSorting();
+	public void onTabSelected(Tab arg0, FragmentTransaction arg1) {
+
+	}
+
+	@Override
+	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
 	}
 }
