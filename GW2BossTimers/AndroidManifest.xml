@@ -9,13 +9,13 @@
 		android:targetSdkVersion="19" />
 
 	<application
-		android:name="BossTimerApplication"
+		android:name="com.derekjass.gw2bosstimers.ApplicationBossTimers"
 		android:allowBackup="true"
 		android:icon="@drawable/ic_launcher"
 		android:label="@string/app_name"
 		android:theme="@style/Theme.AppCompat.Light.DarkActionBar" >
 		<activity
-			android:name="BossTimerActivity"
+			android:name="com.derekjass.gw2bosstimers.MainActivity"
 			android:label="@string/app_name" >
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />

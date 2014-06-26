@@ -13,7 +13,7 @@ import android.widget.ListView;
 public class BossTimerFragment extends ListFragment {
 
 	private BossListAdapter mAdapter;
-	private List<WorldBoss> mBosses = new ArrayList<WorldBoss>();
+	private List<Boss> mBosses = new ArrayList<Boss>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -21,7 +21,7 @@ public class BossTimerFragment extends ListFragment {
 
 		String[] bossData = getResources().getStringArray(R.array.boss_data);
 		for (String boss : bossData) {
-			mBosses.add(new WorldBoss(boss.split(",")));
+			mBosses.add(new Boss(boss.split(",")));
 		}
 
 		mAdapter = new BossListAdapter(getActivity(), mBosses);

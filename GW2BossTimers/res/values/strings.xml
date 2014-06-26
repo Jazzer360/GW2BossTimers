@@ -9,5 +9,7 @@
 	<string name="donations">Donations are appreciated and may be sent to:</string>
 	<string name="account">Jess.4761</string>
 	<string name="dungeon_paths">Dungeon Paths</string>
+	<string name="time_to_reset">"Time until reset - "</string>
+	<string name="paths">"Paths: "</string>
 
 </resources>

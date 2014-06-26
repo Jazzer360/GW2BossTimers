@@ -1,11 +1,11 @@
 package com.derekjass.gw2bosstimers;
 
-import static com.derekjass.gw2bosstimers.BossTimerApplication.ONE_DAY;
-import static com.derekjass.gw2bosstimers.BossTimerApplication.minutes;
+import static com.derekjass.gw2bosstimers.ApplicationBossTimers.ONE_DAY;
+import static com.derekjass.gw2bosstimers.ApplicationBossTimers.minutes;
 
 import java.util.Arrays;
 
-public class WorldBoss {
+public class Boss {
 
 	private final String mLevel;
 	private final String mName;
@@ -14,7 +14,7 @@ public class WorldBoss {
 	private final String mArea;
 	private final int[] mSpawnTimes;
 
-	public WorldBoss(String[] bossInfo) {
+	public Boss(String[] bossInfo) {
 		mLevel = bossInfo[0];
 		mName = bossInfo[1];
 		mRegion = bossInfo[2];
