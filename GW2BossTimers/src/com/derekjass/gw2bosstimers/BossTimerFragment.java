@@ -8,7 +8,6 @@ import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 
 public class BossTimerFragment extends ListFragment {
 
@@ -32,9 +31,7 @@ public class BossTimerFragment extends ListFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		setListAdapter(mAdapter);
-
-		ListView list = getListView();
-		list.setOnItemClickListener(new OnItemClickListener() {
+		getListView().setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -46,12 +43,12 @@ public class BossTimerFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		mAdapter.startSorting();
+		mAdapter.startTimers();
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		mAdapter.stopSorting();
+		mAdapter.stopTimers();
 	}
 }

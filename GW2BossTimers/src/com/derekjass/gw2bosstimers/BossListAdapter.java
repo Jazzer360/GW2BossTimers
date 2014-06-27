@@ -36,7 +36,7 @@ public class BossListAdapter extends ArrayAdapter<Boss> {
 		mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
-	public void startSorting() {
+	public void startTimers() {
 		final long time = System.currentTimeMillis();
 
 		Comparator<Boss> comparator = new Comparator<Boss>() {
@@ -63,12 +63,12 @@ public class BossListAdapter extends ArrayAdapter<Boss> {
 
 			@Override
 			public void onFinish() {
-				startSorting();
+				startTimers();
 			}
 		}.start();
 	}
 
-	public void stopSorting() {
+	public void stopTimers() {
 		mTimer.cancel();
 	}
 

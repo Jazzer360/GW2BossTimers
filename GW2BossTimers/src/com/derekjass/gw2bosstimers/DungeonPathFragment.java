@@ -76,7 +76,6 @@ public class DungeonPathFragment extends Fragment {
 
 			@Override
 			public void onFinish() {
-				mAdapter.notifyDataSetChanged();
 				startCountdown();
 			}
 		}.start();
