@@ -8,6 +8,7 @@
 		android:id="@+id/timeToReset"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:background="@drawable/gradient"
 		android:gravity="center"
 		android:padding="6dp"
 		android:text="@string/time_to_reset"
