@@ -5,7 +5,6 @@ import static com.derekjass.gw2bosstimers.ApplicationBossTimers.PREF_LAST_PATH_P
 
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -39,7 +38,7 @@ public class DungeonListAdapter extends ArrayAdapter<Dungeon> {
 		ViewHolder views;
 
 		if (view == null) {
-			view = getNewView();
+			view = getNewView(parent);
 			views = setupHolder(view);
 		} else {
 			views = (ViewHolder) view.getTag();
@@ -91,11 +90,10 @@ public class DungeonListAdapter extends ArrayAdapter<Dungeon> {
 		return lastCompleted > prevReset;
 	}
 
-	@SuppressLint("InflateParams")
-	private View getNewView() {
+	private View getNewView(ViewGroup parent) {
 		LayoutInflater inflater = (LayoutInflater) getContext()
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		return inflater.inflate(R.layout.dungeon_list_item, null);
+		return inflater.inflate(R.layout.dungeon_list_item, parent, false);
 	}
 
 	private ViewHolder setupHolder(View view) {
