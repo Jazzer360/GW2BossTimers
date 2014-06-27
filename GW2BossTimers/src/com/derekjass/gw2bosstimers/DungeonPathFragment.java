@@ -1,6 +1,7 @@
 package com.derekjass.gw2bosstimers;
 
-import static com.derekjass.gw2bosstimers.ApplicationBossTimers.*;
+import static com.derekjass.gw2bosstimers.ApplicationBossTimers.ONE_DAY;
+import static com.derekjass.gw2bosstimers.ApplicationBossTimers.getTimeString;
 
 import java.util.ArrayList;
 import java.util.List;
