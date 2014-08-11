@@ -25,7 +25,7 @@ import com.derekjass.iabhelper.SimplePurchaseStateFragment;
 public class MainActivity extends ActionBarActivity implements
 		PurchaseStateListener {
 
-	private static final String BANNER_PRODUCT_ID = "android.test.purchased";
+	private static final String BANNER_PRODUCT_ID = "remove_banner";
 	private static final String BANNER_FRAGMENT_TAG = "ad_fragment";
 	private static final int BANNER_REQUEST_CODE = 0;
 
