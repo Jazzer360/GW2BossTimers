@@ -8,6 +8,8 @@
 		android:minSdkVersion="10"
 		android:targetSdkVersion="20" />
 
+	<uses-permission android:name="com.android.vending.BILLING" />
+
 	<application
 		android:name="com.derekjass.gw2bosstimers.ApplicationBossTimers"
 		android:allowBackup="true"

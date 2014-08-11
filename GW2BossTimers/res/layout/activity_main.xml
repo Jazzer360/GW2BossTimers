@@ -10,32 +10,47 @@
 		android:layout_height="0dp"
 		android:layout_weight="1" />
 
-	<View
-		android:layout_width="match_parent"
-		android:layout_height="1dp"
-		android:background="@android:color/black" />
-
-	<LinearLayout
+	<RelativeLayout
+		android:id="@+id/donation_banner"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:background="@drawable/gradient"
-		android:orientation="vertical" >
+		android:background="@drawable/gradient" >
+
+		<View
+			android:layout_width="24dp"
+			android:layout_height="24dp"
+			android:layout_alignBottom="@+id/account_text"
+			android:layout_alignParentEnd="false"
+			android:layout_alignParentRight="true"
+			android:layout_margin="4dp"
+			android:background="@drawable/ic_action_remove" />
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:background="@android:color/black" />
 
 		<TextView
+			android:id="@+id/donations_text"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"
+			android:layout_centerHorizontal="true"
 			android:layout_gravity="center_horizontal"
 			android:paddingTop="6dp"
 			android:text="@string/donations" />
 
 		<TextView
+			android:id="@+id/account_text"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_below="@id/donations_text"
+			android:layout_centerHorizontal="true"
 			android:layout_gravity="center_horizontal"
 			android:paddingBottom="6dp"
 			android:text="@string/account"
 			android:textColor="#33C"
 			android:textSize="20sp" />
-	</LinearLayout>
+	</RelativeLayout>
 
 </LinearLayout>
