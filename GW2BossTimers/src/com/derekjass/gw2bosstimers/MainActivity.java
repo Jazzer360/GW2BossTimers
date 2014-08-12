@@ -19,8 +19,8 @@ import android.view.View.OnClickListener;
 import com.derekjass.iabhelper.PurchaseStateFragment;
 import com.derekjass.iabhelper.PurchaseStateFragment.ProductType;
 import com.derekjass.iabhelper.PurchaseStateFragment.PurchaseState;
-import com.derekjass.iabhelper.SimplePurchaseStateFragment.PurchaseStateListener;
 import com.derekjass.iabhelper.SimplePurchaseStateFragment;
+import com.derekjass.iabhelper.SimplePurchaseStateFragment.PurchaseStateListener;
 
 public class MainActivity extends ActionBarActivity implements
 		PurchaseStateListener {
@@ -31,12 +31,14 @@ public class MainActivity extends ActionBarActivity implements
 
 	private ViewPager mViewPager;
 	private View mDonationBanner;
+	private View mCloseButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mDonationBanner = findViewById(R.id.donation_banner);
+		mCloseButton = findViewById(R.id.close_button);
 		setupBannerClickListener();
 		addPurchaseStateFragment();
 
@@ -46,7 +48,7 @@ public class MainActivity extends ActionBarActivity implements
 	}
 
 	private void setupBannerClickListener() {
-		mDonationBanner.setOnClickListener(new OnClickListener() {
+		mCloseButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				getPurchaseStateFragment().purchaseProduct(BANNER_REQUEST_CODE);
@@ -71,6 +73,26 @@ public class MainActivity extends ActionBarActivity implements
 		ft.add(SimplePurchaseStateFragment.newInstance(BANNER_PRODUCT_ID,
 				ProductType.MANAGED_PRODUCT), BANNER_FRAGMENT_TAG);
 		ft.commit();
+	}
+
+	@Override
+	public void onPurchaseStateChanged(String productId, PurchaseState state) {
+		switch (state) {
+		case NOT_PURCHASED:
+		case UNKNOWN:
+			setBannerAsVisible(true);
+			break;
+		case PURCHASED:
+			setBannerAsVisible(false);
+			break;
+		default:
+		}
+	}
+
+	private void setBannerAsVisible(boolean visible) {
+		int flag = visible ? View.VISIBLE : View.GONE;
+		mDonationBanner.setVisibility(flag);
+		mCloseButton.setVisibility(flag);
 	}
 
 	private PurchaseStateFragment getPurchaseStateFragment() {
@@ -140,19 +162,5 @@ public class MainActivity extends ActionBarActivity implements
 				.setTabListener(tabListener));
 		actionBar.setDisplayShowHomeEnabled(false);
 		actionBar.setDisplayShowTitleEnabled(false);
-	}
-
-	@Override
-	public void onPurchaseStateChanged(String productId, PurchaseState state) {
-		switch (state) {
-		case NOT_PURCHASED:
-		case UNKNOWN:
-			mDonationBanner.setVisibility(View.VISIBLE);
-			break;
-		case PURCHASED:
-			mDonationBanner.setVisibility(View.GONE);
-			break;
-		default:
-		}
 	}
 }

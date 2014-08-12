@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical" >
+	android:layout_height="match_parent" >
 
 	<android.support.v4.view.ViewPager
 		android:id="@+id/viewPager"
 		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		android:layout_weight="1" />
+		android:layout_height="match_parent"
+		android:layout_above="@+id/donation_banner" />
 
 	<RelativeLayout
 		android:id="@+id/donation_banner"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
 		android:background="@drawable/gradient" >
-
-		<View
-			android:layout_width="24dp"
-			android:layout_height="24dp"
-			android:layout_alignBottom="@+id/account_text"
-			android:layout_alignParentEnd="false"
-			android:layout_alignParentRight="true"
-			android:layout_margin="4dp"
-			android:background="@drawable/ic_action_remove" />
 
 		<View
 			android:layout_width="match_parent"
@@ -53,4 +45,17 @@
 			android:textSize="20sp" />
 	</RelativeLayout>
 
-</LinearLayout>
+	<ImageView
+		android:id="@+id/close_button"
+		android:layout_width="24dp"
+		android:layout_height="24dp"
+		android:layout_alignParentEnd="false"
+		android:layout_alignParentRight="true"
+		android:layout_alignTop="@id/donation_banner"
+		android:layout_marginRight="2dp"
+		android:layout_marginTop="-8dp"
+		android:padding="2dp"
+		android:src="@drawable/close_button"
+		tools:ignore="ContentDescription" />
+
+</RelativeLayout>
