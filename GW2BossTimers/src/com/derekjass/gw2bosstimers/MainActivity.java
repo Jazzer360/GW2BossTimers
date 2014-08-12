@@ -78,8 +78,11 @@ public class MainActivity extends ActionBarActivity implements
 	@Override
 	public void onPurchaseStateChanged(String productId, PurchaseState state) {
 		switch (state) {
-		case NOT_PURCHASED:
 		case UNKNOWN:
+			setBannerAsVisible(true);
+			mCloseButton.setVisibility(View.GONE);
+			break;
+		case NOT_PURCHASED:
 			setBannerAsVisible(true);
 			break;
 		case PURCHASED:
