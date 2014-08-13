@@ -39,7 +39,7 @@ public class MainActivity extends ActionBarActivity implements
 		setContentView(R.layout.activity_main);
 		mDonationBanner = findViewById(R.id.donation_banner);
 		mCloseButton = findViewById(R.id.close_button);
-		setupBannerClickListener();
+		setupCloseButton();
 		addPurchaseStateFragment();
 
 		setupPager();
@@ -47,7 +47,7 @@ public class MainActivity extends ActionBarActivity implements
 		setupActionBar();
 	}
 
-	private void setupBannerClickListener() {
+	private void setupCloseButton() {
 		mCloseButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
