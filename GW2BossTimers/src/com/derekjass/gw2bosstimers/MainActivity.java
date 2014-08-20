@@ -17,7 +17,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.derekjass.iabhelper.PurchaseStateFragment;
-import com.derekjass.iabhelper.PurchaseStateFragment.ProductType;
 import com.derekjass.iabhelper.PurchaseStateFragment.PurchaseState;
 import com.derekjass.iabhelper.SimplePurchaseStateFragment;
 import com.derekjass.iabhelper.SimplePurchaseStateFragment.PurchaseStateListener;
@@ -70,8 +69,9 @@ public class MainActivity extends ActionBarActivity implements
 	private void addPurchaseStateFragment() {
 		FragmentManager fm = getSupportFragmentManager();
 		FragmentTransaction ft = fm.beginTransaction();
-		ft.add(SimplePurchaseStateFragment.newInstance(BANNER_PRODUCT_ID,
-				ProductType.MANAGED_PRODUCT), BANNER_FRAGMENT_TAG);
+		Fragment f = SimplePurchaseStateFragment.newInstance(BANNER_PRODUCT_ID,
+				SimplePurchaseStateFragment.MANAGED_PRODUCT);
+		ft.add(f, BANNER_FRAGMENT_TAG);
 		ft.commit();
 	}
 
