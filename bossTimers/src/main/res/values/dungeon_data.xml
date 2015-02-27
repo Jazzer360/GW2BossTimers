@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="dungeon_data">
+        <item>Ascalonian Catacombs,1,2,3</item>
+        <item>Caudecus\'s Manor,1,2,3</item>
+        <item>Twilight Arbor,F,UP,TA</item>
+        <item>Sorrow\'s Embrace,1,2,3</item>
+        <item>Citadel of Flame,1,2,3</item>
+        <item>Honor of the Waves,1,2,3</item>
+        <item>Crucible of Eternity,1,2,3</item>
+        <item>The Ruined City of Arah,1,2,3,4</item>
+    </string-array>
+</resources>
