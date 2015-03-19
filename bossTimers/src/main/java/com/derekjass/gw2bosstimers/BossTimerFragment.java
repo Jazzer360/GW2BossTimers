@@ -17,7 +17,7 @@ public class BossTimerFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-  String[] bossData = getResources().getStringArray(R.array.boss_data);
+        String[] bossData = getResources().getStringArray(R.array.boss_data);
 
         for (String boss : bossData) {
             mBosses.add(new Boss(boss.split(",")));
